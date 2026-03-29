@@ -24,11 +24,10 @@ export const listSharedWithMe = query({
           q.eq("sharedWithEmail", email)
         )
         .collect();
-      for (const share of byEmail) {
-        if (!share.sharedWithUserId) {
-          await ctx.db.patch(share._id, { sharedWithUserId: userId });
-        }
-      }
+      // Filter to only unresolved shares (no userId set yet) or matching userId
+      byEmail = byEmail.filter(
+        (s) => !s.sharedWithUserId || s.sharedWithUserId === userId
+      );
     }
 
     const allShares = [...byUserId, ...byEmail];
