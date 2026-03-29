@@ -72,8 +72,11 @@ export default function LandingPage() {
           <p className="text-xl text-brand-muted mb-2 max-w-2xl mx-auto">
             AI-powered sermon and lesson creator for church leaders.
           </p>
-          <p className="text-lg text-brand-gold mb-8">
+          <p className="text-lg text-brand-gold mb-4">
             Enter a verse or topic. Get a complete teaching toolkit.
+          </p>
+          <p className="text-sm text-brand-muted mb-8">
+            Created by Anthony Talton
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
