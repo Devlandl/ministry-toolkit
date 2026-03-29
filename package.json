@@ -1,8 +1,7 @@
 {
   "name": "ministry-toolkit",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,8 +10,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
     "@clerk/clerk-react": "^5.61.4",
