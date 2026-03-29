@@ -32,29 +32,32 @@ export default function SharedPage() {
         />
       ) : (
         <div className="space-y-2">
-          {sharedToolkits.map((toolkit) => (
-            <Link
-              key={toolkit._id}
-              href={`/app/library/${toolkit._id}`}
-              className="flex items-center gap-3 bg-brand-card border border-brand-border rounded-xl p-4 hover:border-brand-gold/30 transition-colors"
-            >
-              <span className="text-xl flex-shrink-0">🤝</span>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-brand-white truncate">
-                  {toolkit.title}
-                </p>
-                <p className="text-xs text-brand-muted">
-                  {toolkit.verse || toolkit.topic} -{" "}
-                  {toolkit.audience === "adults"
-                    ? "Adults"
-                    : toolkit.audience === "youth"
-                      ? "Youth"
-                      : "Kids"}{" "}
-                  - {formatDate(toolkit.createdAt)}
-                </p>
-              </div>
-            </Link>
-          ))}
+          {sharedToolkits.filter(Boolean).map((toolkit) => {
+            if (!toolkit) return null;
+            return (
+              <Link
+                key={toolkit._id}
+                href={`/app/library/${toolkit._id}`}
+                className="flex items-center gap-3 bg-brand-card border border-brand-border rounded-xl p-4 hover:border-brand-gold/30 transition-colors"
+              >
+                <span className="text-xl flex-shrink-0">🤝</span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-brand-white truncate">
+                    {toolkit.title}
+                  </p>
+                  <p className="text-xs text-brand-muted">
+                    {toolkit.verse || toolkit.topic} -{" "}
+                    {toolkit.audience === "adults"
+                      ? "Adults"
+                      : toolkit.audience === "youth"
+                        ? "Youth"
+                        : "Kids"}{" "}
+                    - {formatDate(toolkit.createdAt)}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       "Write for teenagers (13-18). Use relatable language, pop culture references, real-world teen scenarios, and practical takeaways.",
     kids:
       "Write for children (5-12). Use simple words, fun examples, and age-appropriate activities. Keep sentences short.",
-  }[audience];
+  }[audience as "adults" | "youth" | "kids"];
 
   const prompt = `You are a Bible teaching assistant helping church leaders prepare lessons. Given the following input, create a complete teaching toolkit.
 
