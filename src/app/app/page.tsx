@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useState, useMemo } from "react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
 type Audience = "adults" | "youth" | "kids";
@@ -23,6 +23,25 @@ const SECTIONS = [
   { key: "kidsVersion" as const, label: "Kids Version", icon: "👶" },
 ];
 
+const HOW_IT_WORKS = [
+  {
+    step: 1,
+    title: "Choose Your Topic",
+    description: "Enter a Bible verse, topic, or theme",
+  },
+  {
+    step: 2,
+    title: "Generate",
+    description:
+      "AI creates a complete sermon outline, discussion questions, and more",
+  },
+  {
+    step: 3,
+    title: "Customize",
+    description: "Edit, save to folders, and share with your team",
+  },
+];
+
 export default function GeneratePage() {
   const [inputType, setInputType] = useState<"verse" | "topic">("verse");
   const [input, setInput] = useState("");
@@ -34,6 +53,17 @@ export default function GeneratePage() {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
   const createToolkit = useMutation(api.toolkits.create);
+  const allToolkits = useQuery(api.toolkits.list, {});
+
+  const stats = useMemo(() => {
+    if (!allToolkits) return null;
+    return {
+      total: allToolkits.length,
+      adults: allToolkits.filter((t) => t.audience === "adults").length,
+      youth: allToolkits.filter((t) => t.audience === "youth").length,
+      favorites: allToolkits.filter((t) => t.isFavorite).length,
+    };
+  }, [allToolkits]);
 
   async function handleGenerate() {
     if (!input.trim()) return;
@@ -98,7 +128,62 @@ export default function GeneratePage() {
 
   return (
     <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-brand-white">Generate Toolkit</h1>
+      {/* Welcome Header */}
+      <div className="space-y-1">
+        <h1 className="text-2xl md:text-3xl font-bold text-brand-white">
+          Welcome to Ministry Toolkit
+        </h1>
+        <p className="text-brand-muted text-sm md:text-base">
+          AI-powered sermon and lesson creator for church leaders
+        </p>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Toolkits Created", value: stats?.total ?? "—" },
+          { label: "For Adults", value: stats?.adults ?? "—" },
+          { label: "For Youth", value: stats?.youth ?? "—" },
+          { label: "Favorites", value: stats?.favorites ?? "—" },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="bg-brand-card border border-brand-border rounded-xl p-4 text-center"
+          >
+            <p className="text-2xl font-bold text-brand-gold">{stat.value}</p>
+            <p className="text-xs text-brand-muted mt-1">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* How It Works */}
+      <div className="bg-brand-card border border-brand-border rounded-xl p-5 space-y-4">
+        <h2 className="text-sm font-semibold text-brand-muted uppercase tracking-wider">
+          How It Works
+        </h2>
+        <div className="grid md:grid-cols-3 gap-4">
+          {HOW_IT_WORKS.map((item) => (
+            <div key={item.step} className="flex items-start gap-3">
+              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-gold text-brand-black flex items-center justify-center text-sm font-bold">
+                {item.step}
+              </span>
+              <div>
+                <p className="text-brand-white font-medium text-sm">
+                  {item.title}
+                </p>
+                <p className="text-brand-muted text-xs mt-0.5">
+                  {item.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-brand-border" />
+
+      <h2 className="text-xl font-bold text-brand-white">Generate Toolkit</h2>
 
       {/* Input section */}
       <div className="bg-brand-card border border-brand-border rounded-xl p-6 space-y-4">
